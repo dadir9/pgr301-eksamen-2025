@@ -6,6 +6,10 @@ import json
 import pytest
 import sys
 import os
+from unittest.mock import MagicMock
+
+# Mock boto3 before importing app
+sys.modules['boto3'] = MagicMock()
 
 # Add src to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
