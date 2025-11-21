@@ -1,0 +1,55 @@
+name: Lambda Deploy with SAM
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'lambda-app/**'
+      - '.github/workflows/lambda-deploy.yml'
+
+jobs:
+  deploy:
+    name: Deploy Lambda Function
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: lambda-app
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+
+    - name: Setup SAM CLI
+      uses: aws-actions/setup-sam@v2
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: AKIA22BK4CGMHBPBVZ4X
+        aws-secret-access-key: 8xdvrsYCMT9CzaelkliiPZsU1VR8Mn5JdLk1zwv6k
+        aws-region: us-east-1
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt -t .
+        pip install pytest pytest-cov
+
+    - name: Run tests
+      run: pytest tests/ -v
+
+    - name: SAM Build
+      run: sam build
+
+    - name: SAM Deploy
+      run: |
+        sam deploy \
+          --stack-name college-demo-lambda-stack \
+          --capabilities CAPABILITY_IAM \
+          --no-confirm-changeset \
+          --no-fail-on-empty-changeset

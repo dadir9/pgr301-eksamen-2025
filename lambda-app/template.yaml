@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: College Assignment Lambda Function with SAM
+
+Globals:
+  Function:
+    Timeout: 60
+    Runtime: python3.9
+    MemorySize: 128
+    Environment:
+      Variables:
+        ENVIRONMENT: dev
+
+Resources:
+  CollegeDemoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: college-demo-sam-function
+      CodeUri: src/
+      Handler: app.lambda_handler
+      Environment:
+        Variables:
+          S3_BUCKET: !Ref S3Bucket
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /process
+            Method: POST
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref S3Bucket
+
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'college-demo-sam-bucket-${AWS::AccountId}'
+      VersioningConfiguration:
+        Status: Enabled
+
+Outputs:
+  ApiUrl:
+    Description: API Gateway endpoint URL
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'
+  FunctionArn:
+    Description: Lambda Function ARN
+    Value: !GetAtt CollegeDemoFunction.Arn
+  S3BucketName:
+    Description: S3 Bucket Name
+    Value: !Ref S3Bucket
