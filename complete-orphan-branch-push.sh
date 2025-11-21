@@ -38,7 +38,8 @@ git log --oneline -1 main
 echo ""
 
 # Verify this is an orphan commit (root commit with no parents)
-PARENT_COUNT=$(git rev-list --count --parents main | awk '{print NF-1}')
+PARENT_COUNT=$(git rev-list --parents main | head -1 | wc -w)
+PARENT_COUNT=$((PARENT_COUNT - 1))
 if [ "$PARENT_COUNT" -eq 0 ]; then
     echo "✅ Verified: main branch is an orphan commit (no parent commits)"
 else
@@ -47,7 +48,7 @@ else
 fi
 
 # Show file count
-FILE_COUNT=$(git ls-tree -r main --name-only | wc -l)
+FILE_COUNT=$(git ls-tree -r -z main --name-only | tr -cd '\0' | wc -c)
 echo "Files in main branch: $FILE_COUNT"
 echo ""
 
