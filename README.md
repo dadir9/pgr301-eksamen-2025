@@ -211,9 +211,8 @@ docker build -t college-app:latest .
 AWS_PROFILE=student aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin [ACCOUNT_ID].dkr.ecr.us-east-1.amazonaws.com
 docker push [ACCOUNT_ID].dkr.ecr.us-east-1.amazonaws.com/sample-app-repo:latest
 ```
-### Oppgave 5 – DevOps Reflection (10 Points)
-```bash
 
+✅ Oppgave 5: DevOps Reflection (10 Points)
 What Was Analyzed
 
 This task evaluates how the solution aligns with DevOps principles, the strengths and weaknesses of the chosen architecture, and possible improvements.
@@ -231,7 +230,6 @@ Security Best Practices: IAM roles, encryption, private networking, and OIDC aut
 Fast & Consistent Deployments: CI/CD pipelines ensure repeatability and reliability.
 
 Architecture Evaluation
-
 Strengths
 
 Scalable architecture using serverless + containers.
@@ -261,8 +259,6 @@ Use blue/green or canary deployments to reduce deployment risk.
 Add SAST and dependency scanning in CI/CD.
 
 Add cost monitoring, tagging, and billing alarms.
-```
-
 
 ## 🧹 Cleanup
 
