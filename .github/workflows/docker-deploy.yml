@@ -16,30 +16,43 @@ jobs:
       run:
         working-directory: docker-app
 
+    # Global Environment Variables for AWS
+    env:
+      AWS_ACCESS_KEY_ID: AKIA22BK4CGMHBPBVZ4X
+      AWS_SECRET_ACCESS_KEY: 8xdvrsYCMT9CzaelkliiPZsU1VR8Mn5JdLk1zwv6k
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_REGION: us-east-1
+      AWS_ACCOUNT_ID: 743119262104
+      ECR_REPOSITORY: sample-app-repo
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        aws-access-key-id: AKIA22BK4CGMHBPBVZ4X
-        aws-secret-access-key: 8xdvrsYCMT9CzaelkliiPZsU1VR8Mn5JdLk1zwv6k
-        aws-region: us-east-1
+    - name: Configure AWS CLI
+      run: |
+        aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+        aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+        aws configure set default.region $AWS_DEFAULT_REGION
+
+        echo "Verifying AWS credentials..."
+        aws sts get-caller-identity
 
     - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
+      run: |
+        aws ecr get-login-password --region $AWS_REGION | \
+        docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
     - name: Build Docker image
       run: |
-        docker build -t ${{ steps.login-ecr.outputs.registry }}/sample-app-repo:${{ github.sha }} .
-        docker tag ${{ steps.login-ecr.outputs.registry }}/sample-app-repo:${{ github.sha }} ${{ steps.login-ecr.outputs.registry }}/sample-app-repo:latest
+        docker build -t $ECR_REPOSITORY:latest .
+        docker tag $ECR_REPOSITORY:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest
+        docker tag $ECR_REPOSITORY:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:${{ github.sha }}
 
     - name: Push to ECR
       run: |
-        docker push ${{ steps.login-ecr.outputs.registry }}/sample-app-repo:${{ github.sha }}
-        docker push ${{ steps.login-ecr.outputs.registry }}/sample-app-repo:latest
+        docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest
+        docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:${{ github.sha }}
 
     - name: Update ECS Service
       run: |
