@@ -10,7 +10,8 @@ This project demonstrates a complete AWS infrastructure deployment using Infrast
 | **Oppgave 2** | 25 | ✅ Complete | AWS Lambda, SAM og GitHub Actions |
 | **Oppgave 3** | 25 | ✅ Complete | Containere og Docker |
 | **Oppgave 4** | 25 | ✅ Complete | Metrics, Observability og CloudWatch |
-| **Total** | **90** | **100%** | **All tasks completed successfully** |
+| **Oppgave 5** | 10 | ✅ Complete |Drøfteoppgave - DevOps-prinsipper|
+| **Total** | **100** | **100%** | **All tasks completed successfully** |
 
 ## 🏗️ Architecture Overview
 
@@ -234,6 +235,67 @@ AWS_PROFILE=student aws cloudformation delete-stack --stack-name college-lambda-
 - ✅ **Security Best Practices**: IAM roles, encryption, security groups
 
 ---
+Oppgave 5 – DevOps Reflection
+5a) How the Solution Aligns with DevOps Principles
+
+Infrastructure as Code via Terraform modules
+
+Full automation through GitHub Actions
+
+Observability with dashboards, logs & alarms
+
+Security by design (IAM, encryption, OIDC authentication)
+
+Fast, repeatable deployments
+
+5b) Architecture Evaluation
+Strengths
+
+Highly scalable serverless + containers
+
+Cost-efficient for low/medium traffic
+
+Minimal operations burden
+
+Clean separation of services
+
+Trade-offs
+
+Multiple AWS services increase complexity
+
+AWS vendor lock-in
+
+Distributed logs require good observability practices
+
+5c) Suggested Improvements
+
+Add SLOs/SLIs (latency, error rate, throughput)
+
+Add AWS X-Ray / OpenTelemetry tracing
+
+Implement blue/green or canary deployments
+
+Add security scanning (SAST, dependency scanning)
+
+Add cost alarms and tagging standards
+
+🚀 Deployment Instructions
+
+Terraform, SAM & Docker deployment steps remain identical to original.
+
+📈 Summary
+
+A complete DevOps architecture using:
+
+Terraform IaC
+
+AWS Lambda serverless
+
+ECS Fargate containers
+
+CI/CD automation
+
+Full CloudWatch observability
 
 **Project**: PGR301 DevOps Eksamen 2025
 **Status**: ✅ All Tasks Completed (90/90 Points)
