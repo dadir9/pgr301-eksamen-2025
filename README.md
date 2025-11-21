@@ -211,6 +211,58 @@ docker build -t college-app:latest .
 AWS_PROFILE=student aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin [ACCOUNT_ID].dkr.ecr.us-east-1.amazonaws.com
 docker push [ACCOUNT_ID].dkr.ecr.us-east-1.amazonaws.com/sample-app-repo:latest
 ```
+### Oppgave 5 – DevOps Reflection (10 Points)
+```bash
+
+What Was Analyzed
+
+This task evaluates how the solution aligns with DevOps principles, the strengths and weaknesses of the chosen architecture, and possible improvements.
+
+DevOps Principles Demonstrated
+
+Infrastructure as Code: All resources are defined using Terraform.
+
+Automation: GitHub Actions automates deployment for Terraform, Lambda, and Docker.
+
+Observability: CloudWatch dashboards, logs, alarms, and metrics provide full insight.
+
+Security Best Practices: IAM roles, encryption, private networking, and OIDC authentication.
+
+Fast & Consistent Deployments: CI/CD pipelines ensure repeatability and reliability.
+
+Architecture Evaluation
+
+Strengths
+
+Scalable architecture using serverless + containers.
+
+Cost-effective solution for low to medium workloads.
+
+Minimal operational overhead (no servers to manage).
+
+Modular and clean separation of concerns.
+
+Trade-offs
+
+Increased complexity due to multiple AWS services.
+
+AWS vendor lock-in.
+
+Distributed logs require strong observability practices.
+
+Suggested Improvements
+
+Introduce SLOs/SLIs to measure uptime, latency, and error budgets.
+
+Add AWS X-Ray / OpenTelemetry for distributed tracing.
+
+Use blue/green or canary deployments to reduce deployment risk.
+
+Add SAST and dependency scanning in CI/CD.
+
+Add cost monitoring, tagging, and billing alarms.
+```
+
 
 ## 🧹 Cleanup
 
@@ -234,66 +286,6 @@ AWS_PROFILE=student aws cloudformation delete-stack --stack-name college-lambda-
 - ✅ **Comprehensive Monitoring**: Full observability with CloudWatch
 - ✅ **Security Best Practices**: IAM roles, encryption, security groups
 
----
-Oppgave 5 – DevOps Reflection
-5a) How the Solution Aligns with DevOps Principles
-
-Infrastructure as Code via Terraform modules
-
-Full automation through GitHub Actions
-
-Observability with dashboards, logs & alarms
-
-Security by design (IAM, encryption, OIDC authentication)
-
-Fast, repeatable deployments
-
-5b) Architecture Evaluation
-Strengths
-
-Highly scalable serverless + containers
-
-Cost-efficient for low/medium traffic
-
-Minimal operations burden
-
-Clean separation of services
-
-Trade-offs
-
-Multiple AWS services increase complexity
-
-AWS vendor lock-in
-
-Distributed logs require good observability practices
-
-5c) Suggested Improvements
-
-Add SLOs/SLIs (latency, error rate, throughput)
-
-Add AWS X-Ray / OpenTelemetry tracing
-
-Implement blue/green or canary deployments
-
-Add security scanning (SAST, dependency scanning)
-
-Add cost alarms and tagging standards
-
-🚀 Deployment Instructions
-
-Terraform, SAM & Docker deployment steps remain identical to original.
-
-📈 Summary
-
-A complete DevOps architecture using:
-
-Terraform IaC
-
-AWS Lambda serverless
-
-ECS Fargate containers
-
-CI/CD automation
 
 Full CloudWatch observability
 
